@@ -1,6 +1,8 @@
 package com.example.numerodasorte
 
+import android.content.Context
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -19,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -45,6 +48,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainApp() {
+    val context = LocalContext.current
     var result = remember {
         mutableStateOf("Resultado aparece aqui!")
     }
@@ -88,12 +92,40 @@ fun MainApp() {
             }
 
             Button(onClick = {
-                result.value = "Clicou"
+                var res = numbersGenerator(context,3)
+                result.value = res
             }) {
                 Text("Gerar Numeros")
             }
         }
     }
+}
+
+fun numbersGenerator(context: Context, qtd: Int): String {
+    var result = ""
+
+    if (qtd >= 6 && qtd <= 16) {
+        val numbers = mutableSetOf<Int>()
+
+        while(true) {
+            val n = java.util.Random().nextInt(60)
+            numbers.add(n+1)
+
+            if (numbers.size == qtd) {
+                break
+            }
+        }
+
+        result = numbers.joinToString (" - ")
+    } else {
+        Toast.makeText(
+            context,
+            "Digite um numero entre 6 e 16",
+            Toast.LENGTH_LONG
+        ).show()
+    }
+
+    return result
 }
 
 @Preview(showBackground = true)
