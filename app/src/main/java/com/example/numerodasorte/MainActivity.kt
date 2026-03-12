@@ -14,6 +14,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,6 +45,10 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainApp() {
+    var result = remember {
+        mutableStateOf("Resultado aparece aqui!")
+    }
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background)
@@ -74,14 +80,16 @@ fun MainApp() {
                 )
 
                 Text(
-                    "Resultado aparece aqui!",
+                    result.value,
                     style = TextStyle(
                         fontWeight = FontWeight.Bold
                     )
                 )
             }
 
-            Button(onClick = {}) {
+            Button(onClick = {
+                result.value = "Clicou"
+            }) {
                 Text("Gerar Numeros")
             }
         }
