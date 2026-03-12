@@ -104,13 +104,43 @@ fun MainApp() {
             }
 
             Button(onClick = {
-                var res = numbersGenerator(context,textFieldValue.value.toInt())
+                val numberIsValid = validateTextField(textFieldValue.value)
+
+                if (!numberIsValid){
+                    Toast.makeText(
+                        context,
+                        "Digite um numero entre 6 e 16",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    return@Button
+                }
+                val res = numbersGenerator(context,textFieldValue.value.toInt())
                 result.value = res
             }) {
                 Text("Gerar Numeros")
             }
         }
     }
+}
+
+fun validateInput(input: String):String {
+    val filteredChars = input.filter {
+        it in "0123456789"
+    }
+    return filteredChars
+}
+
+fun validateTextField(text:String): Boolean {
+    if (text.isEmpty()) {
+        return false
+    }
+
+    val qtd = text.toInt()
+    if (qtd < 6 || qtd > 15) {
+        return false
+    }
+
+    return true
 }
 
 fun numbersGenerator(context: Context, qtd: Int): String {
@@ -140,12 +170,7 @@ fun numbersGenerator(context: Context, qtd: Int): String {
     return result
 }
 
-fun validateInput(input: String):String {
-    val filteredChars = input.filter {
-        it in "0123456789"
-    }
-    return filteredChars
-}
+
 
 @Preview(showBackground = true)
 @Composable
