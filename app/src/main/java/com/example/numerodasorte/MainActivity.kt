@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -24,6 +25,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -49,8 +52,11 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainApp() {
     val context = LocalContext.current
-    var result = remember {
+    val result = remember {
         mutableStateOf("Resultado aparece aqui!")
+    }
+    val textFieldValue = remember {
+        mutableStateOf("")
     }
 
     Surface(
@@ -76,11 +82,17 @@ fun MainApp() {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 TextField(
-                    value = "",
+                    keyboardOptions = KeyboardOptions(
+                      keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Done
+                    ),
+                    value = textFieldValue.value,
                     label = {
                         Text("Digite um numero entre 6 e 15")
                     },
-                    onValueChange = {}
+                    onValueChange = {
+                        textFieldValue.value = validateInput(it)
+                    }
                 )
 
                 Text(
@@ -92,7 +104,7 @@ fun MainApp() {
             }
 
             Button(onClick = {
-                var res = numbersGenerator(context,3)
+                var res = numbersGenerator(context,textFieldValue.value.toInt())
                 result.value = res
             }) {
                 Text("Gerar Numeros")
@@ -126,6 +138,13 @@ fun numbersGenerator(context: Context, qtd: Int): String {
     }
 
     return result
+}
+
+fun validateInput(input: String):String {
+    val filteredChars = input.filter {
+        it in "0123456789"
+    }
+    return filteredChars
 }
 
 @Preview(showBackground = true)
