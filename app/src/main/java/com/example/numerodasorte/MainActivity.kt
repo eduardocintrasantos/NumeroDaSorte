@@ -1,6 +1,7 @@
 package com.example.numerodasorte
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -52,6 +53,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainApp() {
     val context = LocalContext.current
+    val prefs = context.getSharedPreferences("Megasena", Context.MODE_PRIVATE)
     val result = remember {
         mutableStateOf("Resultado aparece aqui!")
     }
@@ -94,9 +96,9 @@ fun MainApp() {
                         textFieldValue.value = validateInput(it)
                     }
                 )
-
+                val valorSalvo = prefs.getString("key_numbers", result.value) ?: result.value
                 Text(
-                    result.value,
+                    valorSalvo,
                     style = TextStyle(
                         fontWeight = FontWeight.Bold
                     )
@@ -116,11 +118,18 @@ fun MainApp() {
                 }
                 val res = numbersGenerator(context,textFieldValue.value.toInt())
                 result.value = res
+                saveNumberSequence(prefs, res)
             }) {
                 Text("Gerar Numeros")
             }
         }
     }
+}
+
+fun saveNumberSequence(prefs: SharedPreferences, numberSequence: String) {
+    val editor = prefs.edit()
+    editor.putString("key_numbers", numberSequence)
+    editor.apply()
 }
 
 fun validateInput(input: String):String {
