@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Numero da Sorte</string>
+    <string name="mega_rule">De 6 a 15 numeros</string>
+    <string name="quantity">Quantos numeros vai apostar?</string>
+    <string name="bets">Quantidade de apostas</string>
+    <string name="bets_quantity">Quantas apostas irá fazer?</string>
+    <string name="bets_generate">Gerar apostas</string>
 </resources>
